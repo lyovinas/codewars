@@ -5,6 +5,9 @@
 | Kyu | Title                                              |
 |:---:|:---------------------------------------------------|
 |  6  | [Stop gninnipS My sdroW!](#stop-gninnips-my-sdrow) |
+|  7  | [Reverse words](#reverse-words)                    |
+|  7  | [String ends with?](#string-ends-with)             |
+
   
 ---
 
@@ -44,6 +47,88 @@ public class SpinWords {
         }
         return result.toString().trim();
     }
+}
+```
+</details>
+
+**[⬆ Back to Top](#challenges)**
+
+---
+
+## Reverse words
+
+Complete the function that accepts a string parameter, and reverses each word in the string. All spaces in the string should be retained.
+
+Examples:
+
+```
+"This is an example!" ==> "sihT si na !elpmaxe"
+"double  spaces"      ==> "elbuod  secaps"
+```
+
+```java
+public class Kata
+{
+    public static String reverseWords(final String original)
+    {
+        // Have at it
+    }
+}
+```
+
+<details><summary>Solution</summary>
+
+```java
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class Kata
+{
+    public static String reverseWords(final String original)
+    {
+        if(original.isBlank()) {
+            return original;
+        }
+        return Arrays.stream(original.split(" "))
+                .map(word -> word.length() > 1
+                        ? new StringBuilder(word).reverse()
+                        : word)
+                .collect(Collectors.joining(" "));
+    }
+}
+```
+</details>
+
+**[⬆ Back to Top](#challenges)**
+
+---
+
+## String ends with?
+
+Complete the solution so that it returns true if the first argument(string) passed in ends with the 2nd argument (also a string).
+
+Examples:
+
+```
+solution('abc', 'bc') // returns true
+solution('abc', 'd') // returns false
+```
+
+```java
+public class Kata {
+  public static boolean solution(String str, String ending) {
+    return false;
+  }
+}
+```
+
+<details><summary>Solution</summary>
+
+```java
+public class Kata {
+  public static boolean solution(String str, String ending) {
+    return str.endsWith(ending);
+  }
 }
 ```
 </details>
