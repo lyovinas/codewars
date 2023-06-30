@@ -2,17 +2,20 @@
 
 ## Challenges
 
-| Kyu | Title                                                         |
-|:---:|:--------------------------------------------------------------|
-|  6  | [Stop gninnipS My sdroW!](#stop-gninnips-my-sdrow)            |
-|  7  | [Reverse words](#reverse-words)                               |
-|  7  | [String ends with?](#string-ends-with)                        |
-|  6  | [Find the odd int](#find-the-odd-int)                         |
-|  6  | [Build a pile of Cubes](#build-a-pile-of-cubes)               |
-|  7  | [Growth of a Population](#growth-of-a-population)             |
-|  7  | [Odd or Even?](#odd-or-even)                                  |
-|  5  | [RGB To Hex Conversion](#rgb-to-hex-conversion)               |
-|  6  | [Convert string to camel case](#convert-string-to-camel-case) |
+| Kyu | Title                                                                     |
+|:---:|:--------------------------------------------------------------------------|
+|  6  | [Stop gninnipS My sdroW!](#stop-gninnips-my-sdrow)                        |
+|  7  | [Reverse words](#reverse-words)                                           |
+|  7  | [String ends with?](#string-ends-with)                                    |
+|  6  | [Find the odd int](#find-the-odd-int)                                     |
+|  6  | [Build a pile of Cubes](#build-a-pile-of-cubes)                           |
+|  7  | [Growth of a Population](#growth-of-a-population)                         |
+|  7  | [Odd or Even?](#odd-or-even)                                              |
+|  5  | [RGB To Hex Conversion](#rgb-to-hex-conversion)                           |
+|  6  | [Convert string to camel case](#convert-string-to-camel-case)             |
+|  6  | [Array.diff](#array-diff)                                                 |
+|  6  | [Create Phone Number](#create-phone-number)                               |
+|  5  | [Product of consecutive Fib numbers](#product-of-consecutive-fib-numbers) |
 
   
 ---
@@ -161,7 +164,7 @@ Examples:
 ```java
 public class FindOdd {
 	public static int findIt(int[] a) {
-  	return odd
+  	return odd;
   }
 }
 ```
@@ -435,6 +438,161 @@ class Solution{
             result.append(words[i].substring(1));
         }
         return result.toString();
+    }
+}
+```
+</details>
+
+**[⬆ Back to Top](#challenges)**
+
+---
+
+## Array.diff
+
+Your goal in this kata is to implement a difference function, which subtracts one list from another and returns the result.
+
+It should remove all values from list a, which are present in list b keeping their order.
+
+```
+Kata.arrayDiff(new int[] {1, 2}, new int[] {1}) => new int[] {2}
+```
+If a value is present in b, all of its occurrences must be removed from the other:
+```
+Kata.arrayDiff(new int[] {1, 2, 2, 2, 3}, new int[] {2}) => new int[] {1, 3}
+```
+
+
+```java
+public class Kata {
+
+  public static int[] arrayDiff(int[] a, int[] b) {
+    // Your code here
+    return a;
+  }
+}
+```
+
+<details><summary>Solution</summary>
+
+```java
+import java.util.List;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class Kata {
+
+    public static int[] arrayDiff(int[] a, int[] b) {
+        if (a.length == 0 || b.length == 0) return a;
+        List<Integer> listA = Arrays.stream(a).boxed().collect(Collectors.toList());
+        List<Integer> listB = Arrays.stream(b).boxed().toList();
+        return listA.removeAll(listB)
+                ? listA.stream().mapToInt(Integer::intValue).toArray()
+                : a;
+    }
+
+}
+```
+</details>
+
+**[⬆ Back to Top](#challenges)**
+
+---
+
+## Create Phone Number
+
+Write a function that accepts an array of 10 integers (between 0 and 9), that returns a string of those numbers in the form of a phone number.  
+The returned format must be correct in order to complete this challenge.  
+Don't forget the space after the closing parentheses!
+
+Examples:
+
+```
+Kata.createPhoneNumber(new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 0}) // => returns "(123) 456-7890"
+```
+
+```java
+public class Kata {
+  public static String createPhoneNumber(int[] numbers) {
+    // Your code here!
+  }
+}
+```
+
+<details><summary>Solution</summary>
+
+```java
+public class Kata {
+  public static String createPhoneNumber(int[] numbers) {
+    StringBuilder phoneNumber = new StringBuilder(14);
+    phoneNumber.append("(");
+    for(int i = 0; i < 10; i++) {
+      phoneNumber.append(numbers[i]);
+      if (i == 2) phoneNumber.append(") ");
+      if (i == 5) phoneNumber.append("-");
+    }
+    return phoneNumber.toString();
+  }
+}
+```
+</details>
+
+**[⬆ Back to Top](#challenges)**
+
+---
+
+## Product of consecutive Fib numbers
+
+The Fibonacci numbers are the numbers in the following integer sequence (Fn):
+
+> 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, ...
+
+such as
+
+> F(n) = F(n-1) + F(n-2) with F(0) = 0 and F(1) = 1.
+
+Given a number, say prod (for product), we search two Fibonacci numbers F(n) and F(n+1) verifying
+
+> F(n) * F(n+1) = prod.
+
+Your function productFib takes an integer (prod) and returns an array: `{F(n), F(n+1), 1}` if `F(n) * F(n+1) = prod`.
+
+If you don't find two consecutive F(n) verifying` F(n) * F(n+1) = prod` you will return `{F(n), F(n+1), 0}`  
+F(n) being the smallest one such as `F(n) * F(n+1) > prod`.
+
+Examples:
+
+```
+productFib(714) # should return {21, 34, 1}
+productFib(800) # should return {34, 55, 0}
+```
+
+```java
+public class ProdFib { // must be public for codewars	
+
+    public static long[] productFib(long prod) {
+        // your code
+        return null;
+    }
+}
+```
+
+<details><summary>Solution</summary>
+
+```java
+public class ProdFib {
+
+    public static long[] productFib(long prod) {
+        long n1 = 0;
+        long n2 = 1;
+        long temp = 0;
+        while(temp <= prod) {
+            if (temp == prod) return new long[]{n1, n2, 1};
+            temp = n1 + n2;
+            n1 = n2;
+            n2 = temp;
+            temp = n1 * n2;
+        }
+        return new long[]{n1, n2, 0};
     }
 }
 ```
