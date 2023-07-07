@@ -13,9 +13,13 @@
 |  7  | [Odd or Even?](#odd-or-even)                                              |
 |  5  | [RGB To Hex Conversion](#rgb-to-hex-conversion)                           |
 |  6  | [Convert string to camel case](#convert-string-to-camel-case)             |
-|  6  | [Array.diff](#array-diff)                                                 |
+|  6  | [Array diff](#array-diff)                                                 |
 |  6  | [Create Phone Number](#create-phone-number)                               |
 |  5  | [Product of consecutive Fib numbers](#product-of-consecutive-fib-numbers) |
+|  4  | [Snail Sort](#snail-sort)                                                 |
+|  5  | [Tic-Tac-Toe Checker](#tic-tac-toe-checker)                               |
+|  6  | [Decode the Morse code](#decode-the-morse-code)                           |
+|  4  | [Decode the Morse code, advanced](#decode-the-morse-code-advanced)        |
 
   
 ---
@@ -447,7 +451,7 @@ class Solution{
 
 ---
 
-## Array.diff
+## Array diff
 
 Your goal in this kata is to implement a difference function, which subtracts one list from another and returns the result.
 
@@ -599,6 +603,291 @@ public class ProdFib {
 </details>
 
 **[⬆ Back to Top](#challenges)**
+
+---
+
+## Snail Sort
+
+Given an n x n array, return the array elements arranged from outermost elements to the middle element, traveling clockwise.  
+
+NOTE: The idea is not sort the elements from the lowest value to the highest; the idea is to traverse the 2-d array in a clockwise snailshell pattern.  
+NOTE 2: The 0x0 (empty matrix) is represented as en empty array inside an array [[]].
+
+Examples:
+
+```
+array = [[1,2,3],
+         [4,5,6],
+         [7,8,9]]
+snail(array) #=> [1,2,3,6,9,8,7,4,5]
+```
+
+```java
+public class Snail {
+
+    public static int[] snail(int[][] array) {
+     // enjoy
+   } 
+}
+```
+
+<details><summary>Solution</summary>
+
+```java
+public class Snail {
+
+    public static int[] snail(int[][] array) {
+        if (array.length == 0 || array[0].length == 0) return new int[0];
+        int[] snail = new int[array.length * array.length];
+        int x = -1, y = 0;
+        byte delta = 1;
+        int index = 0;
+        int count = array.length;
+
+        while (index < snail.length) {
+            for (int i = 0; i < count; i++) {
+                x += delta;
+                snail[index++] = array[y][x];
+            }
+            count--;
+            for (int i = 0; i < count; i++) {
+                y += delta;
+                snail[index++] = array[y][x];
+            }
+            delta = (byte) -delta;
+        }
+
+        return snail;
+    }
+}
+```
+</details>
+
+**[⬆ Back to Top](#challenges)**
+
+---
+
+## Tic-Tac-Toe Checker
+
+If we were to set up a Tic-Tac-Toe game, we would want to know whether the board's current state is solved, wouldn't we? Our goal is to create a function that will check that for us!
+
+Assume that the board comes in the form of a 3x3 array, where the value is 0 if a spot is empty, 1 if it is an "X", or 2 if it is an "O", like so:
+
+```
+[[0, 0, 1],
+ [0, 1, 2],
+ [2, 1, 0]]
+```
+We want our function to return:
+
+- -1 if the board is not yet finished AND no one has won yet (there are empty spots),
+- 1 if "X" won,
+- 2 if "O" won,
+- 0 if it's a cat's game (i.e. a draw).
+
+You may assume that the board passed in is valid in the context of a game of Tic-Tac-Toe.
+
+```java
+public class Solution {
+    public static int isSolved(int[][] board) {
+        // your code here
+        return 0;
+    }
+}
+```
+
+<details><summary>Solution</summary>
+
+```java
+import java.util.List;
+import java.util.ArrayList;
+
+public class Solution {
+
+    public static int isSolved(int[][] board) {
+      boolean draw = true;
+      List<List<Integer>> lines = new ArrayList<>(8);
+
+      for (int i = 0; i < 3; i++) {
+        List<Integer> row = new ArrayList<>(3);
+        List<Integer> column = new ArrayList<>(3);
+        for (int j = 0; j < 3; j++) {
+          row.add(board[i][j]);
+          column.add(board[j][i]);
+        }
+        lines.add(row);
+        lines.add(column);
+      }
+
+      List<Integer> diagonal_1 = new ArrayList<>(3);
+      List<Integer> diagonal_2 = new ArrayList<>(3);
+      for (int i = 0; i < 3; i++) {
+        diagonal_1.add(board[i][i]);
+        diagonal_2.add(board[2 - i][i]);
+      }
+      lines.add(diagonal_1);
+      lines.add(diagonal_2);
+
+      for (List<Integer> line : lines) {
+        if (line.stream().allMatch(e -> e == 1)) return 1;
+        if (line.stream().allMatch(e -> e == 2)) return 2;
+        if (line.contains(0)) draw = false;
+      }
+
+      return draw ? 0 : -1;
+    }
+}
+```
+</details>
+
+**[⬆ Back to Top](#challenges)**
+
+---
+
+## Decode the Morse code
+
+In this kata you have to write a simple Morse code decoder. While the Morse code is now mostly superseded by voice and digital data communication channels, it still has its use in some applications around the world.
+The Morse code encodes every character as a sequence of "dots" and "dashes". For example, the letter A is coded as ·−, letter Q is coded as −−·−, and digit 1 is coded as ·−−−−. The Morse code is case-insensitive, traditionally capital letters are used. When the message is written in Morse code, a single space is used to separate the character codes and 3 spaces are used to separate words. For example, the message HEY JUDE in Morse code is ···· · −·−−   ·−−− ··− −·· ·.
+
+NOTE: Extra spaces before or after the code have no meaning and should be ignored.
+
+In addition to letters, digits and some punctuation, there are some special service codes, the most notorious of those is the international distress signal SOS (that was first issued by Titanic), that is coded as ···−−−···. These special codes are treated as single special characters, and usually are transmitted as separate words.
+
+Your task is to implement a function that would take the morse code as input and return a decoded human-readable string.
+
+NOTE: For coding purposes you have to use ASCII characters . and -, not Unicode characters.
+
+The Morse code table is preloaded for you as a dictionary, feel free to use it: MorseCode.get(".--")
+
+All the test strings would contain valid Morse code, so you may skip checking for errors and exceptions.
+
+Examples:
+
+```
+MorseCodeDecoder.decode(".... . -.--   .--- ..- -.. .")
+//should return "HEY JUDE"
+```
+
+```java
+public class MorseCodeDecoder {
+    public static String decode(String morseCode) {
+        // your brilliant code here, remember that you can access the preloaded Morse code table through MorseCode.get(code)
+    }
+}
+```
+
+<details><summary>Solution</summary>
+
+```java
+public class MorseCodeDecoder {
+    public static String decode(String morseCode) {
+      StringBuilder message = new StringBuilder();
+      String[] morseWords = morseCode.trim().split("\\s{3}");
+      for (String morseWord : morseWords) {
+        String[] morseCharacters = morseWord.split(" ");
+        for (String morseCharacter : morseCharacters) {
+          message.append(MorseCode.get(morseCharacter));
+        }
+        message.append(' ');
+      }
+      return message.toString().trim();
+    }
+}
+```
+</details>
+
+**[? Back to Top](#challenges)**
+
+---
+
+## Decode the Morse code, advanced
+
+In this kata you have to write a Morse code decoder for wired electrical telegraph.
+Electric telegraph is operated on a 2-wire line with a key that, when pressed, connects the wires together, which can be detected on a remote station. The Morse code encodes every character being transmitted as a sequence of "dots" (short presses on the key) and "dashes" (long presses on the key).
+
+When transmitting the Morse code, the international standard specifies that:
+
+"Dot" – is 1 time unit long.
+"Dash" – is 3 time units long.
+Pause between dots and dashes in a character – is 1 time unit long.
+Pause between characters inside a word – is 3 time units long.
+Pause between words – is 7 time units long.
+However, the standard does not specify how long that "time unit" is. And in fact different operators would transmit at different speed. An amateur person may need a few seconds to transmit a single character, a skilled professional can transmit 60 words per minute, and robotic transmitters may go way faster.
+
+For this kata we assume the message receiving is performed automatically by the hardware that checks the line periodically, and if the line is connected (the key at the remote station is down), 1 is recorded, and if the line is not connected (remote key is up), 0 is recorded. After the message is fully received, it gets to you for decoding as a string containing only symbols 0 and 1.
+
+For example, the message HEY JUDE, that is ···· · −·−−   ·−−− ··− −·· · may be received as follows:
+
+1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011
+
+As you may see, this transmission is perfectly accurate according to the standard, and the hardware sampled the line exactly two times per "dot".
+
+That said, your task is to implement two functions:
+
+1. Function decodeBits(bits), that should find out the transmission rate of the message, correctly decode the message to dots ., dashes - and spaces (one between characters, three between words) and return those as a string. Note that some extra 0's may naturally occur at the beginning and the end of a message, make sure to ignore them. Also if you have trouble discerning if the particular sequence of 1's is a dot or a dash, assume it's a dot.
+2. Function decodeMorse(morseCode), that would take the output of the previous function and return a human-readable string.
+
+NOTE: For coding purposes you have to use ASCII characters . and -, not Unicode characters.
+
+The Morse code table is preloaded for you (see the solution setup, to get its identifier in your language).
+
+All the test strings would be valid to the point that they could be reliably decoded as described above, so you may skip checking for errors and exceptions, just do your best in figuring out what the message is!
+
+Good luck!
+
+```java
+public class MorseCodeDecoder {
+    public static String decodeBits(String bits) {
+      return ".";
+    }
+    
+    public static String decodeMorse(String morseCode) {
+      return MorseCode.get(morseCode);
+    }
+}
+```
+
+<details><summary>Solution</summary>
+
+```java
+import java.util.Arrays;
+
+public class MorseCodeDecoder {
+    public static String decodeBits(String bits) {
+        bits = bits.substring(bits.indexOf("1"), bits.lastIndexOf("1") + 1);
+        String bitsDelimited = bits.replaceAll("10", "1:0").replaceAll("01", "0:1");
+        int n = Arrays.stream(bitsDelimited.split(":")).distinct().mapToInt(String::length).min().orElse(0);
+        if (n > 0) {
+            String[] words = bits.split("0{" + n * 7 + "}");
+            for (int i = 0; i < words.length; i++) {
+                words[i] = words[i]
+                        .replaceAll("0{" + n * 3 + "}", " ")
+                        .replaceAll("1{" + n * 3 + "}", "-")
+                        .replaceAll("1{" + n + "}", ".")
+                        .replaceAll("0{" + n + "}", "");
+            }
+            return String.join("   ", words);
+        }
+        return "";
+    }
+    
+    public static String decodeMorse(String morseCode) {
+        StringBuilder message = new StringBuilder();
+        String[] morseWords = morseCode.trim().split("\\s{3}");
+        for (String morseWord : morseWords) {
+            String[] morseCharacters = morseWord.split(" ");
+            for (String morseCharacter : morseCharacters) {
+                message.append(MorseCode.get(morseCharacter));
+            }
+            message.append(' ');
+        }
+        return message.toString().trim();
+    }
+}
+```
+</details>
+
+**[? Back to Top](#challenges)**
 
 ---
 
