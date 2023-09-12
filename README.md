@@ -20,6 +20,7 @@
 |  5  | [Tic-Tac-Toe Checker](#tic-tac-toe-checker)                               |
 |  6  | [Decode the Morse code](#decode-the-morse-code)                           |
 |  4  | [Decode the Morse code, advanced](#decode-the-morse-code-advanced)        |
+|  4  | [Sum by Factors](#sum-by-factors)                                         |
 
   
 ---
@@ -796,7 +797,7 @@ public class MorseCodeDecoder {
 ```
 </details>
 
-**[? Back to Top](#challenges)**
+**[⬆ Back to Top](#challenges)**
 
 ---
 
@@ -887,7 +888,87 @@ public class MorseCodeDecoder {
 ```
 </details>
 
-**[? Back to Top](#challenges)**
+**[⬆ Back to Top](#challenges)**
+
+---
+
+## Sum by Factors
+
+Given an array of positive or negative integers
+
+I= [i1,..,in]
+
+you have to produce a sorted array P of the form
+
+[ [p, sum of all ij of I for which p is a prime factor (p positive) of ij] ...]
+
+P will be sorted by increasing order of the prime numbers. The final result has to be given as a string in Java, C#, C, C++ and as an array of arrays in other languages.
+
+Example:
+
+```
+I = {12, 15}; // result = "(2 12)(3 27)(5 15)"
+```
+
+[2, 3, 5] is the list of all prime factors of the elements of I, hence the result.
+
+Notes:
+- It can happen that a sum is 0 if some numbers are negative!  
+Example: I = [15, 30, -45] 5 divides 15, 30 and (-45) so 5 appears in the result, the sum of the numbers for which 5 is a factor is 0 so we have [5, 0] in the result amongst others.
+
+- In Fortran - as in any other language - the returned string is not permitted to contain any redundant trailing whitespace: you can use dynamically allocated character strings.
+
+```java
+public class SumOfDivided {
+  public static String sumOfDivided(int[] l) {
+    // your code
+  }
+}
+```
+
+<details><summary>Solution</summary>
+
+```java
+public class SumOfDivided {
+    public static String sumOfDivided(int[] l) {
+        int max = Math.abs(l[0]);
+        for (int i = 1; i < l.length; i++) {
+            if (Math.abs(l[i]) > max) max = Math.abs(l[i]);
+        }
+
+        boolean[] prime = new boolean[max + 1];
+        for (int i = 0; i <= max; i++) prime[i] = true;
+        for (int p = 2; p * p <= max; p++) {
+            if (prime[p]) {
+                for (int i = p * p; i <= max; i += p) {
+                    prime[i] = false;
+                }
+            }
+        }
+      
+        StringBuilder result = new StringBuilder();
+      
+        for (int i = 2; i <= max; i++) {
+            if (prime[i]) {
+                int sum = 0;
+                boolean hasSum = false;
+                for (int n : l) {
+                    if (n % i == 0) {
+                        sum += n;
+                        hasSum = true;
+                    }
+                }
+                if (hasSum) result.append("(").append(i).append(" ").append(sum).append(")");
+            }
+        }
+      
+        return result.toString();
+    }
+}
+```
+</details>
+
+**[⬆ Back to Top](#challenges)**
 
 ---
 
