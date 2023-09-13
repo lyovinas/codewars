@@ -2,25 +2,26 @@
 
 ## Challenges
 
-| Kyu | Title                                                                     |
-|:---:|:--------------------------------------------------------------------------|
-|  6  | [Stop gninnipS My sdroW!](#stop-gninnips-my-sdrow)                        |
-|  7  | [Reverse words](#reverse-words)                                           |
-|  7  | [String ends with?](#string-ends-with)                                    |
-|  6  | [Find the odd int](#find-the-odd-int)                                     |
-|  6  | [Build a pile of Cubes](#build-a-pile-of-cubes)                           |
-|  7  | [Growth of a Population](#growth-of-a-population)                         |
-|  7  | [Odd or Even?](#odd-or-even)                                              |
-|  5  | [RGB To Hex Conversion](#rgb-to-hex-conversion)                           |
-|  6  | [Convert string to camel case](#convert-string-to-camel-case)             |
-|  6  | [Array diff](#array-diff)                                                 |
-|  6  | [Create Phone Number](#create-phone-number)                               |
-|  5  | [Product of consecutive Fib numbers](#product-of-consecutive-fib-numbers) |
-|  4  | [Snail Sort](#snail-sort)                                                 |
-|  5  | [Tic-Tac-Toe Checker](#tic-tac-toe-checker)                               |
-|  6  | [Decode the Morse code](#decode-the-morse-code)                           |
-|  4  | [Decode the Morse code, advanced](#decode-the-morse-code-advanced)        |
-|  4  | [Sum by Factors](#sum-by-factors)                                         |
+| Kyu | Title                                                                         |
+|:---:|:------------------------------------------------------------------------------|
+|  6  | [Stop gninnipS My sdroW!](#stop-gninnips-my-sdrow)                            |
+|  7  | [Reverse words](#reverse-words)                                               |
+|  7  | [String ends with?](#string-ends-with)                                        |
+|  6  | [Find the odd int](#find-the-odd-int)                                         |
+|  6  | [Build a pile of Cubes](#build-a-pile-of-cubes)                               |
+|  7  | [Growth of a Population](#growth-of-a-population)                             |
+|  7  | [Odd or Even?](#odd-or-even)                                                  |
+|  5  | [RGB To Hex Conversion](#rgb-to-hex-conversion)                               |
+|  6  | [Convert string to camel case](#convert-string-to-camel-case)                 |
+|  6  | [Array diff](#array-diff)                                                     |
+|  6  | [Create Phone Number](#create-phone-number)                                   |
+|  5  | [Product of consecutive Fib numbers](#product-of-consecutive-fib-numbers)     |
+|  4  | [Snail Sort](#snail-sort)                                                     |
+|  5  | [Tic-Tac-Toe Checker](#tic-tac-toe-checker)                                   |
+|  6  | [Decode the Morse code](#decode-the-morse-code)                               |
+|  4  | [Decode the Morse code, advanced](#decode-the-morse-code-advanced)            |
+|  4  | [Sum by Factors](#sum-by-factors)                                             |
+|  4  | [Most frequently used words in a text](#most-frequently-used-words-in-a-text) |
 
   
 ---
@@ -963,6 +964,81 @@ public class SumOfDivided {
         }
       
         return result.toString();
+    }
+}
+```
+</details>
+
+**[⬆ Back to Top](#challenges)**
+
+---
+
+## Most frequently used words in a text
+
+Write a function that, given a string of text (possibly with punctuation and line-breaks), returns an array of the top-3 most occurring words, in descending order of the number of occurrences.
+
+Assumptions:
+- A word is a string of letters (A to Z) optionally containing one or more apostrophes (') in ASCII.
+- Apostrophes can appear at the start, middle or end of a word ('abc, abc', 'abc', ab'c are all valid)
+- Any other characters (e.g. #, \, / , . ...) are not part of a word and should be treated as whitespace.
+- Matches should be case-insensitive, and the words in the result should be lowercased.
+- Ties may be broken arbitrarily.
+- If a text contains fewer than three unique words, then either the top-2 or top-1 words should be returned, or an empty array if a text contains no words.
+
+For java users, the calls will actually be in the form: TopWords.top3(String s), expecting you to return a List<String>.
+
+Bonus points (not really, but just for fun):
+1. Avoid creating an array whose memory footprint is roughly as big as the input text.
+2. Avoid sorting the entire array of unique words.
+
+Examples:
+
+```
+top_3_words("In a village of La Mancha, the name of which I have no desire to call to
+mind, there lived not long since one of those gentlemen that keep a lance
+in the lance-rack, an old buckler, a lean hack, and a greyhound for
+coursing. An olla of rather more beef than mutton, a salad on most
+nights, scraps on Saturdays, lentils on Fridays, and a pigeon or so extra
+on Sundays, made away with three-quarters of his income.")
+# => ["a", "of", "on"]
+
+top_3_words("e e e e DDD ddd DdD: ddd ddd aa aA Aa, bb cc cC e e e")
+# => ["e", "ddd", "aa"]
+
+top_3_words("  //wont won't won't")
+# => ["won't", "wont"]
+```
+
+```java
+import java.util.List;
+
+public class TopWords {
+    
+    public static List<String> top3(String s) {
+        // Your code here
+        return null;
+    }
+}
+```
+
+<details><summary>Solution</summary>
+
+```java
+import java.util.*;
+
+public class TopWords {
+    
+    public static List<String> top3(String s) {
+        Map<String, Integer> wordsCounter = new HashMap<>();
+        Arrays.stream(s.split("[^a-zA-Z']+"))
+          .filter(word -> !word.isEmpty() && !word.matches("[']+"))
+          .map(String::toLowerCase)
+          .forEach(word -> {Integer qty = wordsCounter.get(word); wordsCounter.put(word, qty == null ? 1 : ++qty);});
+        return wordsCounter.entrySet().stream()
+          .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+          .limit(3)
+          .map(Map.Entry::getKey)
+          .toList();
     }
 }
 ```
